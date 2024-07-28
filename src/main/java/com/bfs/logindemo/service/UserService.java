@@ -13,28 +13,25 @@ public class UserService {
     private final UserDao userDao;
 
     @Autowired
-    public UserService(UserDao userDao) { this.userDao = userDao; }
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-    public void createNewUser(User user) {
+    public boolean createNewUser(User user) {
+        if (userDao.getUserByEmail(user.getEmail()).isPresent()) {
+            return false; // Email already exists
+        }
         userDao.createNewUser(user);
+        return true;
     }
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
-    public User getUserById(int id) {
+    public Optional<User> validateLogin(String email, String password) {
         return userDao.getAllUsers().stream()
-                .filter(a -> a.getId() == id)
-                .findFirst()
-                .orElse(new User(-1, "invalid username", "invalid password"));
+                .filter(u -> u.getEmail().equals(email) && u.getPassword().equals(password))
+                .findFirst();
     }
-
-    public Optional<User> validateLogin(String username, String password) {
-        return userDao.getAllUsers().stream()
-                .filter(a -> a.getUsername().equals(username)
-                        && a.getPassword().equals(password))
-                .findAny();
-    }
-
 }

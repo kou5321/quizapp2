@@ -8,6 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Choice {
-    private int id;
+    private int choice_id;
+    private int question_id;
     private String description;
+    private boolean is_correct;
 }

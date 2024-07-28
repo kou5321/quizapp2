@@ -36,6 +36,6 @@ public class LoginFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         System.out.println("path = " + path);
-        return "/login".equals(path) || "/WEB-INF/jsp/login.jsp".equals(path);
+        return "/login".equals(path) || "/register".equals(path) || path.startsWith("/WEB-INF/jsp/");
     }
 }

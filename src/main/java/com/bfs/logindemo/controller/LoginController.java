@@ -1,6 +1,5 @@
 package com.bfs.logindemo.controller;
 
-import com.bfs.logindemo.domain.Question;
 import com.bfs.logindemo.domain.User;
 import com.bfs.logindemo.service.LoginService;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ public class LoginController {
     public String getLogin(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
 
-        // redirect to /quiz if user is already logged in
         if (session != null && session.getAttribute("user") != null) {
             return "redirect:/quiz";
         }
@@ -33,27 +31,22 @@ public class LoginController {
         return "login";
     }
 
-    // validate that we are always getting a new session after login
     @PostMapping("/login")
-    public String postLogin(@RequestParam String username,
+    public String postLogin(@RequestParam String email,
                             @RequestParam String password,
                             HttpServletRequest request) {
 
-        Optional<User> possibleUser = loginService.validateLogin(username, password);
+        Optional<User> possibleUser = loginService.validateLogin(email, password);
 
-        if(possibleUser.isPresent()) {
+        if (possibleUser.isPresent()) {
             HttpSession oldSession = request.getSession(false);
-            // invalidate old session if it exists
             if (oldSession != null) oldSession.invalidate();
 
-            // generate new session
             HttpSession newSession = request.getSession(true);
-
-            // store user details in session
             newSession.setAttribute("user", possibleUser.get());
 
             return "redirect:/quiz";
-        } else { // if user details are invalid
+        } else {
             return "login";
         }
     }
@@ -61,10 +54,7 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, Model model) {
         HttpSession oldSession = request.getSession(false);
-        // invalidate old session if it exists
-        if(oldSession != null) oldSession.invalidate();
+        if (oldSession != null) oldSession.invalidate();
         return "login";
     }
-
-    // If there are something wrong, will be redirected to "/error"
 }

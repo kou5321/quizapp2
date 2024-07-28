@@ -6,6 +6,7 @@ import com.bfs.logindemo.domain.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,18 +22,22 @@ public class QuestionService {
         return questionDao.getQuestion();
     }
 
+    public List<Choice> getChoicesForQuestion(int questionId) {
+        return questionDao.getChoicesForQuestion(questionId);
+    }
+
     public String checkAnswer(Choice selectedChoice) {
         Question question = questionDao.getQuestion();
-        Choice correctChoice = question.getChoices().get(question.getCorrectChoiceId() - 1);
+        List<Choice> choices = questionDao.getChoicesForQuestion(question.getQuestion_id());
+        Choice correctChoice = choices.stream()
+                .filter(Choice::is_correct)
+                .findFirst()
+                .orElse(null);
+
         return selectedChoice.equals(correctChoice) ? "Correct!" : "Incorrect";
     }
 
     public Optional<Choice> getChoiceById(Integer selectedChoiceId) {
-        return questionDao
-                .getQuestion()
-                .getChoices()
-                .stream()
-                .filter(choice -> choice.getId() == selectedChoiceId)
-                .findFirst();
+        return Optional.ofNullable(questionDao.getChoiceById(selectedChoiceId));
     }
 }

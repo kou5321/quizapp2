@@ -8,7 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class User {
-    private int id;
-    private String username;
+    private int user_id;
+    private String email;
     private String password;
+    private String firstname;
+    private String lastname;
+    private boolean is_active;
+    private boolean is_admin;
 }

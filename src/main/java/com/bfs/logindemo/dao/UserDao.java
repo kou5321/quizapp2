@@ -1,32 +1,37 @@
 package com.bfs.logindemo.dao;
 
 import com.bfs.logindemo.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-// Repository / DAO layer
-// We are using some mocked (fake) data here.
-// In your project, you need to use mySQL database, configure the data source.
 @Repository
 public class UserDao {
 
-    private static final List<User> users;
+    private final JdbcTemplate jdbcTemplate;
 
-    static {
-        users = new ArrayList<>();
-        users.add(new User(1, "user1", "pass1"));
-        users.add(new User(2, "user2", "pass2"));
-        users.add(new User(3, "user3", "pass3"));
+    @Autowired
+    public UserDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void createNewUser(User user) {
-        users.add(user);
+        String sql = "INSERT INTO user (email, password, firstname, lastname, is_active, is_admin) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getFirstname(), user.getLastname(), user.is_active(), user.is_admin());
     }
 
     public List<User> getAllUsers() {
-        return users;
+        String sql = "SELECT * FROM user";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        String sql = "SELECT * FROM user WHERE email = ?";
+        List<User> users = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email);
+        return users.stream().findFirst();
+    }
 }
