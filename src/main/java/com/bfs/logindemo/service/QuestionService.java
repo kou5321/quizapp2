@@ -20,4 +20,8 @@ public class QuestionService {
     public List<Question> getQuestionsByCategoryId(int categoryId) {
         return questionDao.getQuestionsByCategoryId(categoryId);
     }
+
+    public Question getQuestionById(int questionId) {
+        return questionDao.getQuestionById(questionId);
+    }
 }

@@ -20,4 +20,8 @@ public class ChoiceService {
     public List<Choice> getChoicesByQuestionId(int questionId) {
         return choiceDao.getChoicesByQuestionId(questionId);
     }
+
+    public Choice getChoiceById(int choiceId) {
+        return choiceDao.getChoiceById(choiceId);
+    }
 }

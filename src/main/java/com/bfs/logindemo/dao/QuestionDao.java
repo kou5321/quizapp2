@@ -22,4 +22,9 @@ public class QuestionDao {
         String sql = "SELECT * FROM question WHERE category_id = ? AND is_active = TRUE";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), categoryId);
     }
+
+    public Question getQuestionById(int questionId) {
+        String sql = "SELECT * FROM question WHERE question_id = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Question.class), questionId);
+    }
 }
