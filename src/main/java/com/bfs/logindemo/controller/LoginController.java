@@ -25,7 +25,7 @@ public class LoginController {
         HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute("user") != null) {
-            return "redirect:/quiz";
+            return "redirect:/home";
         }
 
         return "login";
@@ -44,8 +44,9 @@ public class LoginController {
 
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("user", possibleUser.get());
+            newSession.setAttribute("user_id", possibleUser.get().getUser_id());
 
-            return "redirect:/quiz";
+            return "redirect:/home";
         } else {
             return "login";
         }
