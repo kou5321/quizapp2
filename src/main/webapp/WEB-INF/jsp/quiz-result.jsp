@@ -22,11 +22,7 @@
     <div class="${result.correct ? 'correct' : 'incorrect'}">
         <h4>${result.questionContent}</h4>
         <p>Selected Option: ${result.userSelectedOption}</p>
-        <p>Correct Option:
-            <c:forEach var="option" items="${result.options}">
-                <c:if test="${option.correct}">${option.description}</c:if>
-            </c:forEach>
-        </p>
+        <p>Correct Option: ${result.correctOption}</p>
     </div>
 </c:forEach>
 

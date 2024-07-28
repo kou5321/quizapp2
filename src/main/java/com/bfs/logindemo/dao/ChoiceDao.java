@@ -18,13 +18,13 @@ public class ChoiceDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Choice> getChoicesByQuestionId(int questionId) {
-        String sql = "SELECT * FROM choice WHERE question_id = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Choice.class), questionId);
-    }
-
     public Choice getChoiceById(int choiceId) {
         String sql = "SELECT * FROM choice WHERE choice_id = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Choice.class), choiceId);
+    }
+
+    public List<Choice> getChoicesByQuestionId(int questionId) {
+        String sql = "SELECT * FROM choice WHERE question_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Choice.class), questionId);
     }
 }

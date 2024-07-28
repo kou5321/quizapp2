@@ -319,3 +319,19 @@ INSERT INTO quizquestion (quiz_id, question_id) VALUES
                                                     (3, 17),
                                                     (3, 18),
                                                     (3, 19);
+
+CREATE TABLE quiz_result (
+                             result_id INT AUTO_INCREMENT PRIMARY KEY,
+                             user_id INT,
+                             quiz_id INT,
+                             question_id INT,
+                             selected_choice_id INT,
+                             is_correct BOOLEAN,
+                             question_content TEXT,
+                             user_selected_option TEXT,
+                             correct_option TEXT,
+                             FOREIGN KEY (user_id) REFERENCES user(user_id),
+                             FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id),
+                             FOREIGN KEY (question_id) REFERENCES question(question_id),
+                             FOREIGN KEY (selected_choice_id) REFERENCES choice(choice_id)
+);

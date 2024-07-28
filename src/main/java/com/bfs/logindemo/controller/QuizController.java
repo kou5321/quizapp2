@@ -46,12 +46,19 @@ public class QuizController {
         }
 
         model.addAttribute("questions", questions);
+
+        // Store start time in session to calculate duration later
+        session.setAttribute("quizStartTime", new Date());
+
         return "quiz";
     }
 
     @PostMapping("/quiz")
     public String submitQuiz(@RequestParam Map<String, String> selectedChoices, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
+        Date startTime = (Date) session.getAttribute("quizStartTime");
+        Date endTime = new Date(); // Current time as end time
+
         int correctAnswers = 0;
         List<QuizResult> results = new ArrayList<>();
 
@@ -60,13 +67,25 @@ public class QuizController {
             int selectedChoiceId = Integer.parseInt(entry.getValue());
             Choice selectedChoice = choiceService.getChoiceById(selectedChoiceId);
             Question question = questionService.getQuestionById(questionId);
+
+            if (selectedChoice == null || question == null) {
+                System.out.println("selectedChoice or question is null for questionId: " + questionId + " and selectedChoiceId: " + selectedChoiceId);
+                continue; // Skip this iteration if either is null
+            }
+
             boolean isCorrect = selectedChoice.isCorrect();
             if (isCorrect) correctAnswers++;
 
-            QuizResult quizResult = new QuizResult(user.getUser_id(), 1, questionId, selectedChoiceId, isCorrect); // Replace 1 with actual quiz ID
-            quizResult.setQuestionContent(question.getDescription());
-            quizResult.setUserSelectedOption(selectedChoice.getDescription());
-            quizResult.setOptions(question.getChoices());
+            // Find the correct option
+            String correctOption = "";
+            for (Choice choice : question.getChoices()) {
+                if (choice.isCorrect()) {
+                    correctOption = choice.getDescription();
+                    break;
+                }
+            }
+
+            QuizResult quizResult = new QuizResult(user.getUser_id(), 1, questionId, selectedChoiceId, isCorrect, question.getDescription(), selectedChoice.getDescription(), correctOption);
             results.add(quizResult);
 
             // Save each quiz result
@@ -77,8 +96,8 @@ public class QuizController {
 
         model.addAttribute("quizName", "Quiz Name"); // Replace with actual quiz name
         model.addAttribute("userFullName", user.getFirstname() + " " + user.getLastname());
-        model.addAttribute("quizStartTime", "Start Time"); // Replace with actual start time
-        model.addAttribute("quizEndTime", "End Time"); // Replace with actual end time
+        model.addAttribute("quizStartTime", startTime);
+        model.addAttribute("quizEndTime", endTime);
         model.addAttribute("result", passed ? "Passed" : "Failed");
         model.addAttribute("results", results);
 

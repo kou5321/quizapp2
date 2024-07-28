@@ -17,11 +17,11 @@ public class QuestionService {
         this.questionDao = questionDao;
     }
 
-    public List<Question> getQuestionsByCategoryId(int categoryId) {
-        return questionDao.getQuestionsByCategoryId(categoryId);
-    }
-
     public Question getQuestionById(int questionId) {
         return questionDao.getQuestionById(questionId);
+    }
+
+    public List<Question> getQuestionsByCategoryId(int categoryId) {
+        return questionDao.getQuestionsByCategoryId(categoryId);
     }
 }

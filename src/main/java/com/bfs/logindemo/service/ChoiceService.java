@@ -17,11 +17,11 @@ public class ChoiceService {
         this.choiceDao = choiceDao;
     }
 
-    public List<Choice> getChoicesByQuestionId(int questionId) {
-        return choiceDao.getChoicesByQuestionId(questionId);
-    }
-
     public Choice getChoiceById(int choiceId) {
         return choiceDao.getChoiceById(choiceId);
+    }
+
+    public List<Choice> getChoicesByQuestionId(int questionId) {
+        return choiceDao.getChoicesByQuestionId(questionId);
     }
 }
