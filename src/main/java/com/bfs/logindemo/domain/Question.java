@@ -2,6 +2,8 @@ package com.bfs.logindemo.domain;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,4 +14,5 @@ public class Question {
     private int category_id;
     private String description;
     private boolean is_active;
+    private List<Choice> choices;
 }

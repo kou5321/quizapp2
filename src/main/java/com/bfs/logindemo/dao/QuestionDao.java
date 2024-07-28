@@ -1,42 +1,25 @@
 package com.bfs.logindemo.dao;
 
-import com.bfs.logindemo.domain.Choice;
 import com.bfs.logindemo.domain.Question;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class QuestionDao {
-    private static final List<Question> questions;
-    private static final List<Choice> choices;
 
-    static {
-        questions = new ArrayList<>();
-        questions.add(new Question(1, 1, "What is the correct answer?", true));
+    private final JdbcTemplate jdbcTemplate;
 
-        choices = new ArrayList<>();
-        choices.add(new Choice(1, 1, "42", false));
-        choices.add(new Choice(2, 1, "correct answer", true));
-        choices.add(new Choice(3, 1, "yes", false));
+    @Autowired
+    public QuestionDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Question getQuestion() {
-        return questions.get(0); // For simplicity, returning the first question
-    }
-
-    public List<Choice> getChoicesForQuestion(int questionId) {
-        return choices.stream()
-                .filter(choice -> choice.getQuestion_id() == questionId)
-                .collect(Collectors.toList());
-    }
-
-    public Choice getChoiceById(int choiceId) {
-        return choices.stream()
-                .filter(choice -> choice.getChoice_id() == choiceId)
-                .findFirst()
-                .orElse(null);
+    public List<Question> getQuestionsByCategoryId(int categoryId) {
+        String sql = "SELECT * FROM question WHERE category_id = ? AND is_active = TRUE";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Question.class), categoryId);
     }
 }

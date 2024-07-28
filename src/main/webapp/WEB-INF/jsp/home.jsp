@@ -9,7 +9,9 @@
 <h2>Quiz Categories</h2>
 <ul>
     <c:forEach var="category" items="${categories}">
-        <li>${category.name}</li>
+        <li>
+            <a href="${pageContext.request.contextPath}/quiz?categoryId=${category.category_id}">${category.name}</a>
+        </li>
     </c:forEach>
 </ul>
 
@@ -32,6 +34,5 @@
     </c:forEach>
     </tbody>
 </table>
-
 </body>
 </html>
