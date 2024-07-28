@@ -24,24 +24,27 @@
     </c:forEach>
     <button type="submit">Submit Quiz</button>
 </form>
-</body>
 
 <script>
     let timeLeft = 300; // 5 minutes in seconds
 
     function updateTimer() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        if (timeLeft > 0) {
+        if (timeLeft >= 0) {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            console.log(`Time left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`); // Debugging statement
             timeLeft--;
-        } else {
-            alert('Time is up! The quiz will be submitted automatically.');
-            document.forms[0].submit();
+
+            if (timeLeft < 0) {
+                alert('Time is up! The quiz will be submitted automatically.');
+                document.forms[0].submit();
+            }
         }
     }
 
     setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call to set the timer display immediately
 </script>
-
+</body>
 </html>
