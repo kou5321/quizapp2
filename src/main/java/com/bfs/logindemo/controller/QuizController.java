@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class QuizController {
@@ -46,9 +47,15 @@ public class QuizController {
     }
 
     @PostMapping("/quiz")
-    public String submitQuiz(@RequestParam List<Integer> selectedChoices, HttpSession session) {
+    public String submitQuiz(@RequestParam Map<String, String> selectedChoices, HttpSession session) {
         // Logic to handle quiz submission
         // Save user answers and calculate the score
+
+        for (Map.Entry<String, String> entry : selectedChoices.entrySet()) {
+            String questionId = entry.getKey().split("_")[1];
+            String choiceId = entry.getValue();
+            System.out.println("Question ID: " + questionId + ", Selected Choice ID: " + choiceId);
+        }
 
         return "redirect:/quiz-result";
     }

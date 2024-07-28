@@ -17,7 +17,7 @@
         <div>
             <h3>${question.description}</h3>
             <c:forEach var="choice" items="${question.choices}">
-                <input type="radio" id="choice${choice.choice_id}" name="selectedChoices" value="${choice.choice_id}">
+                <input type="radio" id="choice${choice.choice_id}" name="selectedChoices_${question.question_id}" value="${choice.choice_id}">
                 <label for="choice${choice.choice_id}">${choice.description}</label><br>
             </c:forEach>
         </div>
